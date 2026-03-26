@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LakshyaCV &mdash; Build Your Professional Resume</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+  
+</head>
+<body>
+
+  <!-- Sticky Crown Bar -->
+  <header class="gov-crown" role="banner">
+    <div class="gov-crown-inner">
+      <div class="crown-logo-mark">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <a class="gov-crown-logo" href="/">Lakshya<span>CV</span></a>
+      <span class="gov-crown-tagline">Build &middot; Polish &middot; Download</span>
+    </div>
+  </header>
+
+  <main class="page-wrapper">
+
+    <!-- Page header — above the two-column split -->
+    <div class="page-header">
+      <h1 class="page-title">Build Your Resume</h1>
+      <p class="page-subtitle">Fill in each section &mdash; we&rsquo;ll generate a polished, job-ready PDF for you.</p>
+    </div>
+
+    <!-- Two-column layout: sidebar + main -->
+    <div class="desktop-layout">
+
+      <!-- ══════════════════════════════════════
+           SIDEBAR (desktop only)
+      ══════════════════════════════════════ -->
+      <aside class="sidebar" aria-label="Navigation and progress">
+        <div class="sidebar-inner">
+
+          <div class="sidebar-section-label">Progress</div>
+
+          <!-- Completeness in sidebar -->
+          <div class="sidebar-completeness">
+            <div class="completeness-label">
+              <span>Completeness</span>
+              <span id="sidebar-pct">0%</span>
+            </div>
+            <div class="completeness-track">
+              <div class="completeness-fill" id="sidebar-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <!-- Vertical Step Tracker -->
+          <div class="step-tracker-vertical" id="step-tracker-v" aria-label="Steps">
+            <div class="step-v-item active" id="step-v-1">
+              <div class="step-v-pill">
+                <div class="step-v-num">1</div>
+                <span class="step-v-label">Personal &amp; Skills</span>
+              </div>
+              <div class="step-v-connector"></div>
+            </div>
+            <div class="step-v-item todo" id="step-v-2">
+              <div class="step-v-pill">
+                <div class="step-v-num">2</div>
+                <span class="step-v-label">Work Experience</span>
+              </div>
+              <div class="step-v-connector"></div>
+            </div>
+            <div class="step-v-item todo" id="step-v-3">
+              <div class="step-v-pill">
+                <div class="step-v-num">3</div>
+                <span class="step-v-label">Education</span>
+              </div>
+              <div class="step-v-connector"></div>
+            </div>
+            <div class="step-v-item todo" id="step-v-4">
+              <div class="step-v-pill">
+                <div class="step-v-num">4</div>
+                <span class="step-v-label">Projects &amp; Review</span>
+              </div>
+              <!-- no connector after last -->
+            </div>
+          </div>
+
+          <!-- Selected template badge -->
+          <div class="sidebar-section-label" style="margin-top:4px;">Template</div>
+          <div class="sidebar-tpl-badge" id="sidebar-tpl-badge">
+            <span>Selected</span>
+            <span id="sidebar-tpl-name">Modern</span>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- ══════════════════════════════════════
+           MAIN CONTENT
+      ══════════════════════════════════════ -->
+      <div class="main-content">
+
+        <!-- Mobile: completeness + horizontal tracker (hidden on desktop) -->
+        <div class="mobile-completeness">
+          <div class="completeness-label">
+            <span>Profile completeness</span>
+            <span id="completeness-pct">0%</span>
+          </div>
+          <div class="completeness-track">
+            <div class="completeness-fill" id="completeness-fill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <nav class="step-tracker-horizontal" aria-label="Form steps">
+          <div class="step-h-item active" id="step-h-1">
+            <div class="step-h-pill"><div class="step-h-num">1</div><span class="step-h-label">Personal</span></div>
+            <div class="step-h-line"></div>
+          </div>
+          <div class="step-h-item todo" id="step-h-2">
+            <div class="step-h-pill"><div class="step-h-num">2</div><span class="step-h-label">Experience</span></div>
+            <div class="step-h-line"></div>
+          </div>
+          <div class="step-h-item todo" id="step-h-3">
+            <div class="step-h-pill"><div class="step-h-num">3</div><span class="step-h-label">Education</span></div>
+            <div class="step-h-line"></div>
+          </div>
+          <div class="step-h-item todo" id="step-h-4">
+            <div class="step-h-pill"><div class="step-h-num">4</div><span class="step-h-label">Projects</span></div>
+          </div>
+        </nav>
+
+        <div class="error-banner" id="error-banner" role="alert"></div>
+
+        <!-- ════════════════════════════════
+             STEP 1 — Personal + Summary + Skills + Template
+        ════════════════════════════════ -->
+        <section class="step-panel active" id="step-1">
+
+          <!-- Template Picker -->
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              </div>
+              Choose a Template
+            </div>
+            <p class="card-desc">Select the look that best suits the role you are applying for. You can change this at any time.</p>
+            <div class="template-grid">
+
+              <div class="template-card" id="tpl-classic" onclick="selectTemplate('classic')">
+                <div class="tpl-check">&#10003;</div>
+                <div class="template-preview preview-classic">
+                  <div class="pr-name">James Carter</div>
+                  <div class="pr-title">Senior Analyst</div>
+                  <hr class="pr-rule" />
+                  <div class="pr-section">Experience</div>
+                  <div class="pr-line w80"></div><div class="pr-line w60"></div><div class="pr-line w90"></div>
+                  <div class="pr-section">Education</div>
+                  <div class="pr-line w80"></div><div class="pr-line w50"></div>
+                </div>
+                <div class="template-info">
+                  <div class="template-name">Classic</div>
+                  <div class="template-desc">Black &amp; white. Traditional serif. Ideal for law, finance, academia.</div>
+                </div>
+              </div>
+
+              <div class="template-card" id="tpl-executive" onclick="selectTemplate('executive')">
+                <div class="tpl-check">&#10003;</div>
+                <div class="template-preview preview-executive">
+                  <div class="pr-header">
+                    <div class="pr-name">Sarah Donovan</div>
+                    <div class="pr-etitle">Operations Director</div>
+                    <div class="pr-contact">email &middot; phone &middot; LinkedIn</div>
+                  </div>
+                  <div class="pr-gold"></div>
+                  <div class="pr-body">
+                    <div class="pr-section">Experience</div>
+                    <hr class="pr-rule" />
+                    <div class="pr-line w80"></div><div class="pr-line w60"></div>
+                    <div class="pr-section">Education</div>
+                    <hr class="pr-rule" />
+                    <div class="pr-line w80"></div>
+                  </div>
+                </div>
+                <div class="template-info">
+                  <div class="template-name">Executive</div>
+                  <div class="template-desc">Navy &amp; gold. Corporate authority. Ideal for management, consulting, business.</div>
+                </div>
+              </div>
+
+              <div class="template-card selected" id="tpl-modern" onclick="selectTemplate('modern')">
+                <div class="tpl-check">&#10003;</div>
+                <div class="template-preview preview-modern">
+                  <div class="pr-name">Alex Rivera</div>
+                  <div class="pr-mtitle">Full-Stack Developer</div>
+                  <div class="pr-contact">email &middot; GitHub &middot; LinkedIn</div>
+                  <hr class="pr-rule" />
+                  <div class="pr-section">Experience</div>
+                  <hr class="pr-subline" />
+                  <div class="pr-line w80"></div><div class="pr-line w60"></div>
+                  <div class="pr-section">Projects</div>
+                  <hr class="pr-subline" />
+                  <div class="pr-line w90"></div>
+                </div>
+                <div class="template-info">
+                  <div class="template-name">Modern</div>
+                  <div class="template-desc">Teal accent. Clean sans-serif. Ideal for tech, design, startups.</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Personal Info -->
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              Personal Information
+            </div>
+            <p class="card-desc">Your name and contact details appear at the top of the resume.</p>
+
+            <button class="tip-toggle" onclick="toggleTip('tip-personal')" type="button">
+              <div class="tip-icon-badge">?</div> Tips for a strong header
+            </button>
+            <div class="tip-box" id="tip-personal">
+              <div class="tip-box-title">Header Tips</div>
+              <ul>
+                <li data-icon="&#10003;">Use a professional email &mdash; firstname.lastname@gmail.com, not coolkid99@.</li>
+                <li data-icon="&#10003;">Add LinkedIn and GitHub &mdash; recruiters in tech always check them.</li>
+                <li data-icon="&#10003;">Your job title should match the role you are applying for.</li>
+                <li data-icon="&#10007;">Do not include a photo, age, or marital status.</li>
+                <li data-icon="&#10007;">Do not put your full home address &mdash; City, Country is sufficient.</li>
+              </ul>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="p-name">Full Name <span style="color:var(--col-warn)">*</span></label>
+                <input type="text" id="p-name" placeholder="e.g. Jordan Clarke" autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="p-title">Professional Title</label>
+                <span class="hint-text">The role you are targeting or currently hold</span>
+                <input type="text" id="p-title" placeholder="e.g. Software Engineer" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="p-email">Email <span style="color:var(--col-warn)">*</span></label>
+                <input type="email" id="p-email" placeholder="jordan.clarke@gmail.com" autocomplete="email" />
+              </div>
+              <div class="form-group">
+                <label for="p-phone">Phone</label>
+                <input type="tel" id="p-phone" placeholder="+1 416 000 0000" autocomplete="tel" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="p-location">Location</label>
+                <input type="text" id="p-location" placeholder="Toronto, Canada" />
+              </div>
+              <div class="form-group">
+                <label for="p-linkedin">LinkedIn URL</label>
+                <span class="hint-text">Displayed as &ldquo;LinkedIn&rdquo; hyperlink in PDF</span>
+                <input type="url" id="p-linkedin" placeholder="linkedin.com/in/jordanclarke" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="p-github">GitHub URL</label>
+                <span class="hint-text">Displayed as &ldquo;GitHub&rdquo; hyperlink in PDF</span>
+                <input type="url" id="p-github" placeholder="github.com/jordanclarke" />
+              </div>
+              <div class="form-group">
+                <label for="p-website">Portfolio / Website</label>
+                <span class="hint-text">Displayed as &ldquo;Portfolio&rdquo; hyperlink in PDF</span>
+                <input type="url" id="p-website" placeholder="jordanclarke.dev" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </div>
+              Professional Summary
+            </div>
+            <p class="card-desc">2&ndash;3 sentences that sell you before anyone reads further. Recruiters spend roughly 6 seconds on a resume &mdash; make these count.</p>
+
+            <button class="tip-toggle" onclick="toggleTip('tip-summary')" type="button">
+              <div class="tip-icon-badge">?</div> How to write a standout summary
+            </button>
+            <div class="tip-box" id="tip-summary">
+              <div class="tip-box-title">Summary Tips</div>
+              <ul>
+                <li data-icon="&#10003;">Open with your strongest skill or years of experience &mdash; not &ldquo;I am a&hellip;&rdquo;</li>
+                <li data-icon="&#10003;">Name the type of role or industry you are targeting. Show intent.</li>
+                <li data-icon="&#10003;">Include one achievement with a number: &ldquo;reduced load time by 40%&rdquo;.</li>
+                <li data-icon="&#10007;">Avoid clich&eacute;s: &ldquo;passionate&rdquo;, &ldquo;hardworking&rdquo;, &ldquo;team player&rdquo; &mdash; everyone says this.</li>
+                <li data-icon="&#128161;">Example: &ldquo;Software engineer with 3 years building scalable Django APIs. Reduced deployment time by 60% through CI/CD automation. Seeking a backend role in fintech.&rdquo;</li>
+              </ul>
+            </div>
+
+            <div class="field-action-row">
+              <label for="summary">Summary</label>
+              <button class="btn-generate-desc" type="button" onclick="openGeneratePanel('summary-generate-panel')">
+                <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Generate
+              </button>
+            </div>
+            <div class="generate-panel" id="summary-generate-panel">
+              <div class="generate-panel-title">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Pre-defined Description Generator
+              </div>
+              <div class="generate-warning">
+                <strong>Before you use this:</strong> The descriptions below are generic starting points. You should always personalise and rewrite them to reflect your actual experience, achievements, and strengths. A generic description will not stand out &mdash; use this only as a draft to refine.
+              </div>
+              <div class="generate-select-row">
+                <div class="select-wrap">
+                  <select id="summary-role-select" onchange="previewGeneratedText('summary-role-select','summary')">
+                    <option value="">Select your job role&hellip;</option>
+                  </select>
+                </div>
+                <button class="btn-use-description" id="summary-use-btn" type="button" disabled
+                  onclick="insertGeneratedText('summary-role-select','summary','summary-generate-panel')">
+                  Use as Draft
+                </button>
+              </div>
+            </div>
+            <textarea id="summary" rows="4"
+              placeholder="Software engineer with 4 years of experience building scalable web applications. Delivered a 35% improvement in API response time at a B2B SaaS company through query optimisation. Seeking a senior backend role in a product-led organisation."
+              maxlength="600" oninput="updateCharCount(this,'summary-count',600)"></textarea>
+            <div class="char-counter" id="summary-count">0 / 600</div>
+          </div>
+
+          <!-- Skills -->
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              Skills
+            </div>
+            <p class="card-desc">Comma-separated list. Rendered as compact pill tags in a row-based grid on your PDF.</p>
+
+            <button class="tip-toggle" onclick="toggleTip('tip-skills')" type="button">
+              <div class="tip-icon-badge">?</div> How to list skills effectively
+            </button>
+            <div class="tip-box" id="tip-skills">
+              <div class="tip-box-title">Skills Tips</div>
+              <ul>
+                <li data-icon="&#10003;">List hard skills first: languages, frameworks, tools, platforms.</li>
+                <li data-icon="&#10003;">Mirror keywords directly from the job description &mdash; ATS scanners look for exact matches.</li>
+                <li data-icon="&#10003;">Aim for 10&ndash;16 skills. Too few looks sparse; too many looks unfiltered.</li>
+                <li data-icon="&#10007;">Skip &ldquo;Microsoft Word&rdquo;, &ldquo;Google Docs&rdquo; unless explicitly in the job posting.</li>
+                <li data-icon="&#10007;">Do not include soft skills here &mdash; put them in your summary or bullets.</li>
+              </ul>
+            </div>
+
+            <div class="form-group">
+              <label for="skills">Skills (comma separated)</label>
+              <span class="hint-text">e.g. Python, Django, React, PostgreSQL, Docker, Git</span>
+              <input type="text" id="skills" placeholder="Python, Django, React, PostgreSQL, Docker, Git, REST APIs, Linux" oninput="renderSkillTags()" />
+            </div>
+            <div class="skills-preview" id="skills-preview"></div>
+          </div>
+
+          <div class="nav-buttons">
+            <button class="btn btn-primary" onclick="goToStep(2)">Next: Experience &rarr;</button>
+          </div>
+        </section>
+
+
+        <!-- ════════════════════════════════
+             STEP 2 — Experience
+        ════════════════════════════════ -->
+        <section class="step-panel" id="step-2">
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              Work Experience
+            </div>
+            <p class="card-desc">Most recent role first. Use bullet points &mdash; one achievement per line. Start each line on a new line.</p>
+
+            <button class="tip-toggle" onclick="toggleTip('tip-exp')" type="button">
+              <div class="tip-icon-badge">?</div> How to write bullets that get interviews
+            </button>
+            <div class="tip-box" id="tip-exp">
+              <div class="tip-box-title">Experience Tips</div>
+              <ul>
+                <li data-icon="&#10003;">Use the CAR formula: Challenge &rarr; Action &rarr; Result.</li>
+                <li data-icon="&#10003;">Start every bullet with a strong action verb: Built, Led, Reduced, Shipped, Designed.</li>
+                <li data-icon="&#10003;">Quantify everything: &ldquo;reduced API response time by 35%&rdquo;, &ldquo;managed 4 engineers&rdquo;.</li>
+                <li data-icon="&#10003;">3&ndash;5 bullets per role is ideal. More dilutes impact.</li>
+                <li data-icon="&#10007;">Do not write job duties &mdash; write achievements.</li>
+                <li data-icon="&#10007;">Avoid first person: not &ldquo;I built&hellip;&rdquo; &mdash; just &ldquo;Built&hellip;&rdquo;</li>
+                <li data-icon="&#128161;">Period format: &ldquo;Jan 2022 &ndash; Mar 2024&rdquo; or &ldquo;2022 &ndash; Present&rdquo;.</li>
+              </ul>
+            </div>
+
+            <div id="experience-blocks"></div>
+            <button class="btn-add" onclick="addBlock('experience')" type="button">+ Add Another Role</button>
+          </div>
+          <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+            <button class="btn btn-primary" onclick="goToStep(3)">Next: Education &rarr;</button>
+          </div>
+        </section>
+
+
+        <!-- ════════════════════════════════
+             STEP 3 — Education
+        ════════════════════════════════ -->
+        <section class="step-panel" id="step-3">
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              Education
+            </div>
+            <p class="card-desc">Most recent degree first. Include certifications and online courses here too.</p>
+
+            <button class="tip-toggle" onclick="toggleTip('tip-edu')" type="button">
+              <div class="tip-icon-badge">?</div> Education section tips
+            </button>
+            <div class="tip-box" id="tip-edu">
+              <div class="tip-box-title">Education Tips</div>
+              <ul>
+                <li data-icon="&#10003;">Use the full degree name: &ldquo;Bachelor of Science in Computer Science&rdquo;.</li>
+                <li data-icon="&#10003;">Include AWS, Google Cloud, Coursera certifications here too.</li>
+                <li data-icon="&#10003;">List relevant coursework only if you are a recent graduate with limited experience.</li>
+                <li data-icon="&#10007;">Do not include high school if you have a university degree.</li>
+                <li data-icon="&#10007;">Do not include GPA below 3.0 &mdash; leave it blank.</li>
+                <li data-icon="&#128161;">For master&rsquo;s students: mention your specialisation if it is relevant to the role.</li>
+              </ul>
+            </div>
+
+            <div id="education-blocks"></div>
+            <button class="btn-add" onclick="addBlock('education')" type="button">+ Add Another Qualification</button>
+          </div>
+          <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="goToStep(2)">&larr; Back</button>
+            <button class="btn btn-primary" onclick="goToStep(4)">Next: Projects &rarr;</button>
+          </div>
+        </section>
+
+
+        <!-- ════════════════════════════════
+             STEP 4 — Projects + Review
+        ════════════════════════════════ -->
+        <section class="step-panel" id="step-4">
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              Projects
+            </div>
+            <p class="card-desc">Side projects, open source, and academic work all count. 2&ndash;3 strong projects beat 6 weak ones.</p>
+
+            <button class="tip-toggle" onclick="toggleTip('tip-proj')" type="button">
+              <div class="tip-icon-badge">?</div> How to present projects powerfully
+            </button>
+            <div class="tip-box" id="tip-proj">
+              <div class="tip-box-title">Project Tips</div>
+              <ul>
+                <li data-icon="&#10003;">Describe the problem it solves: &ldquo;An app that reduces X&rdquo; beats &ldquo;A web app&rdquo;.</li>
+                <li data-icon="&#10003;">Include a live URL or GitHub link &mdash; shown as &ldquo;View&rdquo; hyperlink in the PDF.</li>
+                <li data-icon="&#10003;">Mention scale or traction: &ldquo;used by 200+ students&rdquo;, &ldquo;500 GitHub stars&rdquo;.</li>
+                <li data-icon="&#10003;">List the specific tech stack &mdash; recruiters and engineers scan for this.</li>
+                <li data-icon="&#10007;">Do not list tutorial projects unless heavily extended.</li>
+              </ul>
+            </div>
+
+            <div id="projects-blocks"></div>
+            <button class="btn-add" onclick="addBlock('projects')" type="button">+ Add Another Project</button>
+          </div>
+
+          <!-- Review -->
+          <div class="card">
+            <div class="card-title">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              Review &amp; Generate
+            </div>
+            <p class="card-desc">Check your details below then download your PDF.</p>
+            <div class="review-grid" id="review-grid"></div>
+            <div style="margin-top:20px;">
+              <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToStep(3)">&larr; Back</button>
+                <button class="btn btn-download" id="generate-btn" onclick="generateResume()" type="button">Download PDF</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /main-content -->
+    </div><!-- /desktop-layout -->
+
+  </main>
+
+  <footer class="site-footer">
+    LakshyaCV &mdash; Built with FastAPI &amp; ReportLab. Your data never leaves your browser session.
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

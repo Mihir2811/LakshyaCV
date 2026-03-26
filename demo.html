@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lakshya CV — Animated Demo</title>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   ANIMATED DEMO — COMPLETE STYLESHEET
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ─── Custom Properties ────────────────────────────────────────── */
+:root {
+    --primary: #1d7a6b;
+    --primary-hover: #155e53;
+    --primary-light: rgba(29, 122, 107, 0.08);
+    --primary-glow: rgba(29, 122, 107, 0.25);
+    --dark: #0b0c0c;
+    --body: #0b0c0c;
+    --grey: #505a5f;
+    --light-grey: #b1b4b6;
+    --border: #d2d5d8;
+    --bg: #f8f5f1;
+    --white: #ffffff;
+    --error: #d4351c;
+    --success: #00703c;
+    --focus: #fd0;
+
+    --font: 'Inter', -apple-system, sans-serif;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+    --shadow-xl: 0 20px 60px rgba(0,0,0,0.15);
+
+    --radius: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
+    --speed: 0.3s;
+}
+
+/* ─── Reset ────────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font);
+    background: linear-gradient(135deg, #0b0c0c 0%, #1a2332 50%, #0b0c0c 100%);
+    color: var(--body);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ─── Floating Particles Background ────────────────────────────── */
+.particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: particleFloat linear infinite;
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.15; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+}
+
+/* ─── Hero / Intro Screen ──────────────────────────────────────── */
+.hero-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at center, rgba(29,122,107,0.15) 0%, transparent 70%),
+                linear-gradient(135deg, #0b0c0c 0%, #1a2332 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-overlay.hidden {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 600px;
+    padding: 40px;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: var(--primary);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: badgePulse 2s ease infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 var(--primary-glow); }
+    50% { box-shadow: 0 0 0 8px transparent; }
+}
+
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.03em;
+}
+
+.hero-title span {
+    color: var(--primary);
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--light-grey);
+    line-height: 1.5;
+    margin-bottom: 32px;
+}
+
+.hero-start-text {
+    color: var(--primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    animation: heroPulse 1.5s ease infinite;
+}
+
+@keyframes heroPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* ─── Demo Container ──────────────────────────────────────────── */
+.demo-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.demo-wrapper.visible {
+    opacity: 1;
+}
+
+/* ─── Narration Bar ────────────────────────────────────────────── */
+.narration-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(11, 12, 12, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--primary);
+    padding: 14px 24px;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transform: translateY(-100%);
+    transition: transform 0.4s ease;
+}
+
+.narration-bar.visible {
+    transform: translateY(0);
+}
+
+.narration-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.narration-text {
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.narration-progress {
+    width: 120px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.narration-progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+/* ─── Browser Mockup ───────────────────────────────────────────── */
+.browser-frame {
+    background: var(--dark);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl), 0 0 80px rgba(29,122,107,0.08);
+    margin-top: 70px;
+}
+
+.browser-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #1a1d21;
+    gap: 10px;
+}
+
+.browser-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.browser-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.browser-dot.red { background: #ff5f57; }
+.browser-dot.yellow { background: #ffbd2e; }
+.browser-dot.green { background: #28c840; }
+
+.browser-url {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    color: var(--light-grey);
+    font-family: var(--font);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.browser-url .lock-icon {
+    color: var(--success);
+    font-size: 0.7rem;
+}
+
+.browser-content {
+    background: var(--bg);
+    min-height: 600px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ─── App Header (inside browser) ──────────────────────────────── */
+.app-header {
+    background: var(--dark);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.app-header__title {
+    color: var(--white);
+    font-size: 0.9375rem;
+    font-weight: 700;
+}
+
+.app-header__badge {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* ─── App Content Area ─────────────────────────────────────────── */
+.app-body {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 24px 28px 40px;
+}
+
+/* ─── Step Indicator (inside app) ──────────────────────────────── */
+.demo-steps {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    list-style: none;
+}
+
+.demo-step-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.demo-step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--border);
+    color: var(--grey);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin: 0 auto 5px;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.demo-step-item.active .demo-step-circle {
+    background: var(--primary);
+    color: var(--white);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+.demo-step-item.completed .demo-step-circle {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.demo-step-label {
+    font-size: 0.625rem;
+    color: var(--grey);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.demo-step-item.active .demo-step-label {
+    color: var(--dark);
+    font-weight: 700;
+}
+
+.demo-step-item.completed .demo-step-label {
+    color: var(--primary);
+}
+
+/* Connector lines */
+.demo-step-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: calc(50% + 19px);
+    width: calc(100% - 38px);
+    height: 2px;
+    background: var(--border);
+    z-index: 1;
+    transition: background 0.4s ease;
+}
+
+.demo-step-item.completed:not(:last-child)::after {
+    background: var(--primary);
+}
+
+/* ─── Form Card ────────────────────────────────────────────────── */
+.demo-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.demo-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.demo-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.demo-card__desc {
+    font-size: 0.8125rem;
+    color: var(--grey);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* ─── Form Fields ──────────────────────────────────────────────── */
+.demo-field {
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.demo-field.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.demo-field__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 3px;
+}
+
+.demo-field__hint {
+    font-size: 0.6875rem;
+    color: var(--grey);
+    margin-bottom: 5px;
+}
+
+.demo-field__input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 2px solid var(--dark);
+    background: var(--white);
+    font-family: var(--font);
+    font-size: 0.875rem;
+    color: var(--dark);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    display: block;
+    min-height: 38px;
+    line-height: 1.4;
+}
+
+.demo-field__input.focused {
+    border-color: var(--dark);
+    box-shadow: inset 0 0 0 2px var(--dark);
+    outline: 3px solid var(--focus);
+    outline-offset: 0;
+}
+
+.demo-field__input.textarea {
+    min-height: 64px;
+    resize: none;
+}
+
+.demo-field__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Cursor blink inside input */
+.demo-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--dark);
+    margin-left: 1px;
+    animation: cursorBlink 0.6s step-end infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ─── Tip Panel ────────────────────────────────────────────────── */
+.demo-tip-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.625rem;
+    font-weight: 700;
+    border: 1px solid var(--primary);
+    cursor: default;
+    transition: all 0.3s ease;
+}
+
+.demo-tip-btn.clicked {
+    background: var(--primary);
+    color: var(--white);
+    transform: scale(1.15);
+}
+
+.demo-tip {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--dark);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+}
+
+.demo-tip.visible {
+    max-height: 200px;
+    opacity: 1;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+}
+
+.demo-tip .tip-do { color: var(--success); font-weight: 700; }
+.demo-tip .tip-dont { color: var(--error); font-weight: 700; }
+.demo-tip .tip-idea { color: var(--primary); font-weight: 700; }
+
+/* ─── Repeater Entry ───────────────────────────────────────────── */
+.demo-repeater {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition: all 0.4s ease;
+}
+
+.demo-repeater.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.demo-repeater.highlight {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.demo-repeater__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.demo-repeater__title {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ─── Skill Tags ───────────────────────────────────────────────── */
+.demo-skills-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 30px;
+    margin-top: 8px;
+}
+
+.demo-skill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--primary-light);
+    border: 1px solid var(--primary);
+    color: var(--dark);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 2px;
+    opacity: 0;
+    transform: scale(0.8) translateY(4px);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.demo-skill-tag.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+/* ─── Button Styles ────────────────────────────────────────────── */
+.demo-btn {
+    font-family: var(--font);
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 10px 20px;
+    border: none;
+    cursor: default;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    line-height: 1;
+}
+
+.demo-btn-primary {
+    background: var(--primary);
+    color: var(--white);
+    box-shadow: 0 2px 0 var(--primary-hover);
+}
+
+.demo-btn-primary.clicked {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+.demo-btn-secondary {
+    background: var(--white);
+    color: var(--dark);
+    border: 2px solid var(--dark);
+}
+
+.demo-btn-generate {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 1rem;
+    padding: 12px 28px;
+    width: 100%;
+    justify-content: center;
+    box-shadow: 0 2px 0 var(--primary-hover);
+}
+
+.demo-btn-generate.clicked {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+.demo-btn-add {
+    background: none;
+    border: 2px dashed var(--primary);
+    color: var(--primary);
+    width: 100%;
+    justify-content: center;
+    padding: 8px;
+    font-size: 0.8125rem;
+    margin-top: 4px;
+}
+
+.demo-btn-add.clicked {
+    background: var(--primary-light);
+    border-style: solid;
+}
+
+/* ─── Step Navigation ──────────────────────────────────────────── */
+.demo-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* ─── Loading Spinner ──────────────────────────────────────────── */
+.demo-spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: none;
+}
+
+.demo-spinner.visible {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Status Message ───────────────────────────────────────────── */
+.demo-status {
+    padding: 10px 14px;
+    margin-top: 14px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.4s ease;
+}
+
+.demo-status.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.demo-status.success {
+    background: #e6f4ed;
+    border-left: 4px solid var(--success);
+    color: var(--success);
+}
+
+/* ─── PDF Preview Overlay ──────────────────────────────────────── */
+.pdf-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 50;
+}
+
+.pdf-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pdf-preview {
+    background: var(--white);
+    width: 380px;
+    min-height: 520px;
+    box-shadow: var(--shadow-xl);
+    padding: 36px 32px;
+    position: relative;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid var(--border);
+}
+
+.pdf-overlay.visible .pdf-preview {
+    transform: scale(1) translateY(0);
+}
+
+.pdf-preview__label {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: var(--white);
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* PDF Content Styles */
+.pdf-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 2px;
+    font-family: Georgia, 'Times New Roman', serif;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.pdf-name.visible { opacity: 1; }
+
+.pdf-jobtitle {
+    font-size: 0.75rem;
+    color: var(--grey);
+    margin-bottom: 6px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.pdf-jobtitle.visible { opacity: 1; }
+
+.pdf-contact {
+    font-size: 0.5625rem;
+    color: var(--grey);
+    margin-bottom: 8px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.pdf-contact.visible { opacity: 1; }
+
+.pdf-hr {
+    border: none;
+    height: 1px;
+    background: var(--dark);
+    margin-bottom: 10px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease;
+}
+
+.pdf-hr.visible { transform: scaleX(1); }
+
+.pdf-section {
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.4s ease;
+}
+
+.pdf-section.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.pdf-section__heading {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-left: 8px;
+    border-left: 3px solid var(--primary);
+    margin-bottom: 6px;
+}
+
+.pdf-section__line {
+    font-size: 0.5625rem;
+    color: var(--dark);
+    line-height: 1.6;
+    margin-bottom: 2px;
+}
+
+.pdf-section__line.bold {
+    font-weight: 700;
+}
+
+.pdf-section__line.grey {
+    color: var(--grey);
+}
+
+.pdf-section__line.bullet::before {
+    content: "• ";
+}
+
+.pdf-skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px 16px;
+}
+
+.pdf-footer {
+    position: absolute;
+    bottom: 16px;
+    left: 32px;
+    right: 32px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.5rem;
+    color: var(--light-grey);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.pdf-footer.visible { opacity: 1; }
+
+/* ─── Review Section ───────────────────────────────────────────── */
+.demo-review {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.demo-review-section {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: all 0.3s ease;
+}
+
+.demo-review-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.demo-review-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.demo-review__title {
+    font-size: 0.5625rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+}
+
+.demo-review__content {
+    font-size: 0.75rem;
+    color: var(--dark);
+    line-height: 1.5;
+}
+
+/* ─── Annotation Pointers ──────────────────────────────────────── */
+.annotation {
+    position: absolute;
+    background: var(--dark);
+    color: var(--white);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    box-shadow: var(--shadow-md);
+}
+
+.annotation::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--dark);
+    transform: rotate(45deg);
+}
+
+.annotation.arrow-bottom::after {
+    bottom: -4px;
+    left: 50%;
+    margin-left: -4px;
+}
+
+.annotation.arrow-top::after {
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+}
+
+.annotation.arrow-left::after {
+    left: -4px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+.annotation.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── Spotlight Effect ─────────────────────────────────────────── */
+.spotlight-ring {
+    position: absolute;
+    border: 2px solid var(--primary);
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 0 3px var(--primary-glow), 0 0 20px var(--primary-glow);
+}
+
+.spotlight-ring.visible {
+    opacity: 1;
+}
+
+/* ─── Section visible for step panels ──────────────────────────── */
+.demo-step-content {
+    display: none;
+}
+
+.demo-step-content.active {
+    display: block;
+}
+
+/* ─── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9375rem;
+    }
+
+    .browser-content {
+        min-height: 500px;
+    }
+
+    .app-body {
+        padding: 16px 16px 30px;
+    }
+
+    .pdf-preview {
+        width: 300px;
+        min-height: 420px;
+        padding: 24px 20px;
+    }
+
+    .demo-field__row {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Particles Background -->
+<div class="particles" id="particles"></div>
+
+<!-- Hero Intro -->
+<div class="hero-overlay" id="hero">
+    <div class="hero-content">
+        <span class="hero-badge">Animated Demo</span>
+        <h1 class="hero-title">See how<br><span>LakshyaCV</span><br>works</h1>
+        <p class="hero-subtitle">Watch the entire workflow animate automatically — from filling in your details to generating a polished PDF resume.</p>
+        <p class="hero-start-text">Starting in a moment…</p>
+    </div>
+</div>
+
+<!-- Narration Bar -->
+<div class="narration-bar" id="narration">
+    <span class="narration-step" id="narration-step">1</span>
+    <span class="narration-text" id="narration-text">Starting the demo…</span>
+    <div class="narration-progress">
+        <div class="narration-progress-fill" id="narration-progress"></div>
+    </div>
+</div>
+
+<!-- Demo Wrapper -->
+<div class="demo-wrapper" id="demo-wrapper">
+
+    <!-- Browser Frame -->
+    <div class="browser-frame">
+        <div class="browser-toolbar">
+            <div class="browser-dots">
+                <span class="browser-dot red"></span>
+                <span class="browser-dot yellow"></span>
+                <span class="browser-dot green"></span>
+            </div>
+            <div class="browser-url">
+                <span class="lock-icon">🔒</span>
+                localhost:8000
+            </div>
+        </div>
+
+        <div class="browser-content" id="browser-content">
+            <!-- App Header -->
+            <div class="app-header">
+                <span class="app-header__title">Resume Generator</span>
+                <span class="app-header__badge">Beta</span>
+            </div>
+
+            <!-- App Body -->
+            <div class="app-body" id="app-body">
+
+                <!-- Step Indicator -->
+                <ol class="demo-steps" id="demo-steps">
+                    <li class="demo-step-item active" data-step="1">
+                        <div class="demo-step-circle">1</div>
+                        <span class="demo-step-label">Personal</span>
+                    </li>
+                    <li class="demo-step-item" data-step="2">
+                        <div class="demo-step-circle">2</div>
+                        <span class="demo-step-label">Experience</span>
+                    </li>
+                    <li class="demo-step-item" data-step="3">
+                        <div class="demo-step-circle">3</div>
+                        <span class="demo-step-label">Edu & Skills</span>
+                    </li>
+                    <li class="demo-step-item" data-step="4">
+                        <div class="demo-step-circle">4</div>
+                        <span class="demo-step-label">Review</span>
+                    </li>
+                </ol>
+
+                <!-- ══════════════ STEP 1 ══════════════ -->
+                <div class="demo-step-content active" id="step-1">
+                    <div class="demo-card" id="card-1">
+                        <h2 class="demo-card__title">Personal Information</h2>
+                        <p class="demo-card__desc">Start with who you are. This appears at the top of your resume.</p>
+
+                        <div class="demo-field" id="f-name">
+                            <div class="demo-field__label">
+                                Full name
+                                <span class="demo-tip-btn" id="tip-btn-name">?</span>
+                            </div>
+                            <div class="demo-tip" id="tip-name">
+                                <p><span class="tip-do">✅ Do:</span> Use your professional name — the one on LinkedIn.</p>
+                                <p><span class="tip-dont">❌ Don't:</span> Include nicknames or "Mr/Ms/Dr" unless relevant.</p>
+                            </div>
+                            <div class="demo-field__hint">As you'd like it on your resume</div>
+                            <div class="demo-field__input" id="input-name"></div>
+                        </div>
+
+                        <div class="demo-field" id="f-title">
+                            <div class="demo-field__label">Professional title</div>
+                            <div class="demo-field__hint">e.g. Software Engineer, Product Designer</div>
+                            <div class="demo-field__input" id="input-title"></div>
+                        </div>
+
+                        <div class="demo-field" id="f-contact">
+                            <div class="demo-field__row">
+                                <div>
+                                    <div class="demo-field__label">Email address</div>
+                                    <div class="demo-field__input" id="input-email"></div>
+                                </div>
+                                <div>
+                                    <div class="demo-field__label">Phone number</div>
+                                    <div class="demo-field__input" id="input-phone"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="demo-field" id="f-location">
+                            <div class="demo-field__label">Location</div>
+                            <div class="demo-field__input" id="input-location"></div>
+                        </div>
+
+                        <div class="demo-field" id="f-summary">
+                            <div class="demo-field__label">
+                                Professional summary
+                                <span class="demo-tip-btn" id="tip-btn-summary">?</span>
+                            </div>
+                            <div class="demo-tip" id="tip-summary">
+                                <p><span class="tip-do">✅ Do:</span> Start with your strongest skill. Recruiters read line one only.</p>
+                                <p><span class="tip-idea">💡 Example:</span> "Engineer with 6 years building scalable APIs handling 10M+ requests/day."</p>
+                            </div>
+                            <div class="demo-field__input textarea" id="input-summary"></div>
+                        </div>
+                    </div>
+
+                    <div class="demo-nav">
+                        <span></span>
+                        <div class="demo-btn demo-btn-primary" id="btn-next-1">Continue →</div>
+                    </div>
+                </div>
+
+                <!-- ══════════════ STEP 2 ══════════════ -->
+                <div class="demo-step-content" id="step-2">
+                    <div class="demo-card" id="card-2">
+                        <h2 class="demo-card__title">Work Experience</h2>
+                        <p class="demo-card__desc">Add your roles, starting with the most recent.</p>
+
+                        <div class="demo-tip visible" style="max-height:200px;opacity:1;">
+                            <p><span class="tip-do">✅ Do:</span> Use the CAR format: <strong>Challenge → Action → Result</strong></p>
+                            <p><span class="tip-idea">💡 Power verbs:</span> Led, Built, Reduced, Automated, Launched</p>
+                        </div>
+
+                        <div id="exp-entries"></div>
+                        <div class="demo-btn demo-btn-add" id="btn-add-exp">+ Add experience</div>
+                    </div>
+
+                    <div class="demo-nav">
+                        <div class="demo-btn demo-btn-secondary">← Back</div>
+                        <div class="demo-btn demo-btn-primary" id="btn-next-2">Continue →</div>
+                    </div>
+                </div>
+
+                <!-- ══════════════ STEP 3 ══════════════ -->
+                <div class="demo-step-content" id="step-3">
+                    <div class="demo-card" id="card-3a">
+                        <h2 class="demo-card__title">Education</h2>
+                        <p class="demo-card__desc">Degrees, certifications, or relevant coursework.</p>
+                        <div id="edu-entries"></div>
+                    </div>
+
+                    <div class="demo-card" id="card-3b">
+                        <h2 class="demo-card__title">Skills</h2>
+                        <p class="demo-card__desc">Add your technical and professional skills.</p>
+
+                        <div class="demo-field" id="f-skill">
+                            <div class="demo-field__label">
+                                Add a skill
+                                <span class="demo-tip-btn" id="tip-btn-skills">?</span>
+                            </div>
+                            <div class="demo-tip" id="tip-skills">
+                                <p><span class="tip-do">✅ Do:</span> List hard skills first. Be specific.</p>
+                                <p><span class="tip-dont">❌ Don't:</span> List "Microsoft Word" unless job asks.</p>
+                            </div>
+                            <div style="display:flex;gap:8px;">
+                                <div class="demo-field__input" id="input-skill" style="flex:1;"></div>
+                                <div class="demo-btn demo-btn-primary" id="btn-add-skill" style="padding:8px 14px;font-size:0.75rem;">Add</div>
+                            </div>
+                            <div class="demo-skills-area" id="skills-area"></div>
+                        </div>
+                    </div>
+
+                    <div class="demo-nav">
+                        <div class="demo-btn demo-btn-secondary">← Back</div>
+                        <div class="demo-btn demo-btn-primary" id="btn-next-3">Continue →</div>
+                    </div>
+                </div>
+
+                <!-- ══════════════ STEP 4 ══════════════ -->
+                <div class="demo-step-content" id="step-4">
+                    <div class="demo-card" id="card-4a">
+                        <h2 class="demo-card__title">Projects</h2>
+                        <p class="demo-card__desc">Side projects, open-source, or notable work.</p>
+                        <div id="proj-entries"></div>
+                    </div>
+
+                    <div class="demo-card" id="card-4b">
+                        <h2 class="demo-card__title">Review</h2>
+                        <p class="demo-card__desc">Check your information before generating.</p>
+                        <div class="demo-review" id="review-area"></div>
+                    </div>
+
+                    <div class="demo-btn demo-btn-generate" id="btn-generate">
+                        <span id="gen-text">Generate Resume PDF</span>
+                        <span class="demo-spinner" id="gen-spinner"></span>
+                    </div>
+                    <div class="demo-status" id="demo-status"></div>
+                </div>
+            </div>
+
+            <!-- PDF Preview Overlay -->
+            <div class="pdf-overlay" id="pdf-overlay">
+                <div class="pdf-preview" id="pdf-preview">
+                    <span class="pdf-preview__label">Generated PDF</span>
+
+                    <div class="pdf-name" id="pdf-name">Sarah Chen</div>
+                    <div class="pdf-jobtitle" id="pdf-jobtitle">Senior Full-Stack Engineer</div>
+                    <div class="pdf-contact" id="pdf-contact">sarah.chen@email.com · +44 7700 900123 · London, UK</div>
+                    <hr class="pdf-hr" id="pdf-hr">
+
+                    <div class="pdf-section" id="pdf-sec-summary">
+                        <div class="pdf-section__heading">Professional Summary</div>
+                        <div class="pdf-section__line">Engineer with 6 years building scalable distributed systems. Led migration from monolith to microservices, reducing deploy time by 80% and handling 10M+ daily requests.</div>
+                    </div>
+
+                    <div class="pdf-section" id="pdf-sec-exp">
+                        <div class="pdf-section__heading">Experience</div>
+                        <div class="pdf-section__line bold">Stellar Technologies — Senior Full-Stack Engineer</div>
+                        <div class="pdf-section__line grey">Mar 2021 — Present</div>
+                        <div class="pdf-section__line bullet">Architected event-driven microservices handling 10M+ requests/day</div>
+                        <div class="pdf-section__line bullet">Reduced CI/CD pipeline time from 45min to 8min using parallel builds</div>
+                        <div class="pdf-section__line bullet">Mentored 4 junior engineers, all promoted within 18 months</div>
+                    </div>
+
+                    <div class="pdf-section" id="pdf-sec-edu">
+                        <div class="pdf-section__heading">Education</div>
+                        <div class="pdf-section__line bold">Imperial College London</div>
+                        <div class="pdf-section__line grey">MEng Computer Science — 2015–2019</div>
+                    </div>
+
+                    <div class="pdf-section" id="pdf-sec-skills">
+                        <div class="pdf-section__heading">Skills</div>
+                        <div class="pdf-skills-grid">
+                            <div class="pdf-section__line bullet">TypeScript</div>
+                            <div class="pdf-section__line bullet">React</div>
+                            <div class="pdf-section__line bullet">Node.js</div>
+                            <div class="pdf-section__line bullet">PostgreSQL</div>
+                            <div class="pdf-section__line bullet">AWS</div>
+                            <div class="pdf-section__line bullet">Docker</div>
+                        </div>
+                    </div>
+
+                    <div class="pdf-section" id="pdf-sec-projects">
+                        <div class="pdf-section__heading">Projects</div>
+                        <div class="pdf-section__line bold">CloudDeploy CLI</div>
+                        <div class="pdf-section__line">Zero-config deployment tool for Node.js apps. 1.2k GitHub stars.</div>
+                        <div class="pdf-section__line grey">Tech: Go, Docker, AWS CDK</div>
+                    </div>
+
+                    <div class="pdf-footer" id="pdf-footer">
+                        <span>25 June 2025</span>
+                        <span>Page 1</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ *  ANIMATION ENGINE — Orchestrates the entire demo
+ * ═══════════════════════════════════════════════════════════════════
+ */
+(function () {
+    "use strict";
+
+    // ─── Utility Functions ────────────────────────────────────────
+
+    function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function el(id) {
+        return document.getElementById(id);
+    }
+
+    function show(element) {
+        if (typeof element === "string") element = el(element);
+        if (element) element.classList.add("visible");
+    }
+
+    function hide(element) {
+        if (typeof element === "string") element = el(element);
+        if (element) element.classList.remove("visible");
+    }
+
+    function addClass(element, cls) {
+        if (typeof element === "string") element = el(element);
+        if (element) element.classList.add(cls);
+    }
+
+    function removeClass(element, cls) {
+        if (typeof element === "string") element = el(element);
+        if (element) element.classList.remove(cls);
+    }
+
+    /**
+     * Type text into a div element character by character
+     */
+    async function typeText(elementId, text, speed = 35) {
+        const element = el(elementId);
+        if (!element) return;
+
+        element.classList.add("focused");
+        element.innerHTML = '<span class="demo-cursor"></span>';
+        await wait(200);
+
+        for (let i = 0; i < text.length; i++) {
+            const typed = text.substring(0, i + 1);
+            element.innerHTML = typed + '<span class="demo-cursor"></span>';
+            await wait(speed + Math.random() * 20);
+        }
+
+        await wait(300);
+        element.innerHTML = text;
+        element.classList.remove("focused");
+    }
+
+    /**
+     * Quick set text without animation
+     */
+    function setText(elementId, text) {
+        const element = el(elementId);
+        if (element) element.textContent = text;
+    }
+
+    /**
+     * Set narration bar content
+     */
+    function narrate(step, text, progress) {
+        el("narration-step").textContent = step;
+        el("narration-text").textContent = text;
+        el("narration-progress").style.width = progress + "%";
+    }
+
+    /**
+     * Change the active step in the step indicator
+     */
+    function setActiveStep(stepNum) {
+        const items = document.querySelectorAll(".demo-step-item");
+        items.forEach(item => {
+            const s = parseInt(item.dataset.step);
+            item.classList.remove("active", "completed");
+            if (s === stepNum) {
+                item.classList.add("active");
+            } else if (s < stepNum) {
+                item.classList.add("completed");
+                item.querySelector(".demo-step-circle").textContent = "✓";
+            }
+        });
+    }
+
+    /**
+     * Switch to a step panel
+     */
+    function switchPanel(stepNum) {
+        document.querySelectorAll(".demo-step-content").forEach(p => {
+            p.classList.remove("active");
+        });
+        const panel = el("step-" + stepNum);
+        if (panel) panel.classList.add("active");
+    }
+
+    /**
+     * Create experience entry HTML
+     */
+    function createExpEntry(data) {
+        const div = document.createElement("div");
+        div.className = "demo-repeater";
+        div.innerHTML = `
+            <div class="demo-repeater__header">
+                <span class="demo-repeater__title">Experience 1</span>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Company</div>
+                <div class="demo-field__input" id="${data.companyId}"></div>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Role / Job title</div>
+                <div class="demo-field__input" id="${data.roleId}"></div>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__row">
+                    <div>
+                        <div class="demo-field__label">Start date</div>
+                        <div class="demo-field__input" id="${data.startId}"></div>
+                    </div>
+                    <div>
+                        <div class="demo-field__label">End date</div>
+                        <div class="demo-field__input" id="${data.endId}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Key achievements</div>
+                <div class="demo-field__input" id="${data.bullet1Id}" style="margin-bottom:6px;font-size:0.8125rem;"></div>
+                <div class="demo-field__input" id="${data.bullet2Id}" style="margin-bottom:6px;font-size:0.8125rem;"></div>
+                <div class="demo-field__input" id="${data.bullet3Id}" style="font-size:0.8125rem;"></div>
+            </div>
+        `;
+        return div;
+    }
+
+    /**
+     * Create education entry HTML
+     */
+    function createEduEntry(data) {
+        const div = document.createElement("div");
+        div.className = "demo-repeater";
+        div.innerHTML = `
+            <div class="demo-repeater__header">
+                <span class="demo-repeater__title">Education 1</span>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Institution</div>
+                <div class="demo-field__input" id="${data.instId}"></div>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Degree</div>
+                <div class="demo-field__input" id="${data.degreeId}"></div>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__row">
+                    <div>
+                        <div class="demo-field__label">Start date</div>
+                        <div class="demo-field__input" id="${data.startId}"></div>
+                    </div>
+                    <div>
+                        <div class="demo-field__label">End date</div>
+                        <div class="demo-field__input" id="${data.endId}"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+        return div;
+    }
+
+    /**
+     * Create project entry HTML
+     */
+    function createProjEntry(data) {
+        const div = document.createElement("div");
+        div.className = "demo-repeater";
+        div.innerHTML = `
+            <div class="demo-repeater__header">
+                <span class="demo-repeater__title">Project 1</span>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Project name</div>
+                <div class="demo-field__input" id="${data.nameId}"></div>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Description</div>
+                <div class="demo-field__input textarea" id="${data.descId}"></div>
+            </div>
+            <div class="demo-field visible">
+                <div class="demo-field__label">Tech stack</div>
+                <div class="demo-field__input" id="${data.techId}"></div>
+            </div>
+        `;
+        return div;
+    }
+
+    /**
+     * Add a skill tag with animation
+     */
+    async function addSkillTag(name) {
+        const area = el("skills-area");
+        const tag = document.createElement("span");
+        tag.className = "demo-skill-tag";
+        tag.textContent = name;
+        area.appendChild(tag);
+        await wait(50);
+        tag.classList.add("visible");
+        await wait(200);
+    }
+
+    /**
+     * Build review section
+     */
+    function addReviewSection(title, content) {
+        const area = el("review-area");
+        const section = document.createElement("div");
+        section.className = "demo-review-section";
+        section.innerHTML = `
+            <div class="demo-review__title">${title}</div>
+            <div class="demo-review__content">${content}</div>
+        `;
+        area.appendChild(section);
+        return section;
+    }
+
+    /**
+     * Generate particles
+     */
+    function createParticles() {
+        const container = el("particles");
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement("div");
+            p.className = "particle";
+            p.style.left = Math.random() * 100 + "%";
+            p.style.animationDuration = (8 + Math.random() * 12) + "s";
+            p.style.animationDelay = Math.random() * 10 + "s";
+            p.style.width = (2 + Math.random() * 4) + "px";
+            p.style.height = p.style.width;
+            container.appendChild(p);
+        }
+    }
+
+
+    // ─── Main Animation Sequence ──────────────────────────────────
+
+    async function runDemo() {
+        createParticles();
+
+        // ── Intro ──
+        await wait(3000);
+        addClass("hero", "hidden");
+        await wait(600);
+
+        show("demo-wrapper");
+        await wait(300);
+        show("narration");
+        narrate("1", "Let's start by filling in personal details…", 5);
+
+        // ══════════════════════════════════════════════════════════
+        //  STEP 1 — Personal Information
+        // ══════════════════════════════════════════════════════════
+        await wait(500);
+        show("card-1");
+        await wait(400);
+
+        // Show name field
+        show("f-name");
+        narrate("1", "First, the user enters their full name…", 8);
+        await wait(500);
+
+        // Show tip
+        narrate("1", "Clicking the ? icon reveals helpful advice", 10);
+        addClass("tip-btn-name", "clicked");
+        await wait(400);
+        show("tip-name");
+        await wait(2500);
+        hide("tip-name");
+        removeClass("tip-btn-name", "clicked");
+        await wait(300);
+
+        // Type name
+        narrate("1", "Typing the name with a realistic cursor…", 12);
+        await typeText("input-name", "Sarah Chen", 50);
+        await wait(400);
+
+        // Title
+        show("f-title");
+        await wait(300);
+        narrate("1", "Adding a professional title that matches the target role…", 16);
+        await typeText("input-title", "Senior Full-Stack Engineer", 40);
+        await wait(400);
+
+        // Contact
+        show("f-contact");
+        await wait(200);
+        narrate("1", "Email and phone go side by side…", 19);
+        await typeText("input-email", "sarah.chen@email.com", 30);
+        await wait(200);
+        await typeText("input-phone", "+44 7700 900123", 35);
+        await wait(300);
+
+        // Location
+        show("f-location");
+        await wait(200);
+        narrate("1", "Adding location…", 22);
+        await typeText("input-location", "London, UK", 45);
+        await wait(300);
+
+        // Summary with tip
+        show("f-summary");
+        await wait(300);
+        narrate("1", "The summary tip shows best practices…", 24);
+        addClass("tip-btn-summary", "clicked");
+        await wait(300);
+        show("tip-summary");
+        await wait(2500);
+        hide("tip-summary");
+        removeClass("tip-btn-summary", "clicked");
+        await wait(300);
+
+        narrate("1", "Writing a strong summary — specific, quantified, impactful", 28);
+        await typeText("input-summary",
+            "Engineer with 6 years building scalable distributed systems. Led migration from monolith to microservices, reducing deploy time by 80%.",
+            18
+        );
+        await wait(600);
+
+        // Click Continue
+        narrate("1", "Step 1 complete — clicking Continue…", 30);
+        addClass("btn-next-1", "clicked");
+        await wait(400);
+        removeClass("btn-next-1", "clicked");
+        await wait(300);
+
+
+        // ══════════════════════════════════════════════════════════
+        //  STEP 2 — Experience
+        // ══════════════════════════════════════════════════════════
+        setActiveStep(2);
+        switchPanel(2);
+        narrate("2", "Step 2: Adding work experience…", 35);
+        await wait(400);
+        show("card-2");
+        await wait(600);
+
+        // Click Add Experience
+        narrate("2", "Clicking '+ Add experience' creates a new entry…", 38);
+        addClass("btn-add-exp", "clicked");
+        await wait(400);
+        removeClass("btn-add-exp", "clicked");
+
+        const expEntry = createExpEntry({
+            companyId: "exp-company-1",
+            roleId: "exp-role-1",
+            startId: "exp-start-1",
+            endId: "exp-end-1",
+            bullet1Id: "exp-bullet-1",
+            bullet2Id: "exp-bullet-2",
+            bullet3Id: "exp-bullet-3",
+        });
+        el("exp-entries").appendChild(expEntry);
+        await wait(100);
+        show(expEntry);
+        addClass(expEntry, "highlight");
+        await wait(600);
+        removeClass(expEntry, "highlight");
+
+        // Fill experience
+        narrate("2", "Filling in company and role…", 40);
+        await typeText("exp-company-1", "Stellar Technologies", 40);
+        await wait(200);
+        await typeText("exp-role-1", "Senior Full-Stack Engineer", 35);
+        await wait(200);
+
+        narrate("2", "Adding date range…", 42);
+        await typeText("exp-start-1", "Mar 2021", 50);
+        await wait(200);
+        await typeText("exp-end-1", "Present", 50);
+        await wait(300);
+
+        narrate("2", "Writing achievement bullets using the CAR format…", 45);
+        await typeText("exp-bullet-1", "Architected event-driven microservices handling 10M+ requests/day", 18);
+        await wait(200);
+        await typeText("exp-bullet-2", "Reduced CI/CD pipeline time from 45min to 8min using parallel builds", 18);
+        await wait(200);
+        await typeText("exp-bullet-3", "Mentored 4 junior engineers, all promoted within 18 months", 18);
+        await wait(600);
+
+        // Click Continue
+        narrate("2", "Experience done — moving to Step 3…", 50);
+        addClass("btn-next-2", "clicked");
+        await wait(400);
+        removeClass("btn-next-2", "clicked");
+        await wait(300);
+
+
+        // ══════════════════════════════════════════════════════════
+        //  STEP 3 — Education + Skills
+        // ══════════════════════════════════════════════════════════
+        setActiveStep(3);
+        switchPanel(3);
+        narrate("3", "Step 3: Education and skills…", 55);
+        await wait(400);
+        show("card-3a");
+        await wait(400);
+
+        // Education entry
+        const eduEntry = createEduEntry({
+            instId: "edu-inst-1",
+            degreeId: "edu-degree-1",
+            startId: "edu-start-1",
+            endId: "edu-end-1",
+        });
+        el("edu-entries").appendChild(eduEntry);
+        await wait(100);
+        show(eduEntry);
+        await wait(400);
+
+        narrate("3", "Adding education details…", 58);
+        await typeText("edu-inst-1", "Imperial College London", 40);
+        await wait(200);
+        await typeText("edu-degree-1", "MEng Computer Science, First Class", 30);
+        await wait(200);
+        await typeText("edu-start-1", "Sep 2015", 50);
+        await typeText("edu-end-1", "Jun 2019", 50);
+        await wait(500);
+
+        // Skills
+        show("card-3b");
+        await wait(400);
+        show("f-skill");
+        await wait(300);
+
+        // Show skills tip
+        narrate("3", "The skills tip reminds us to list hard skills first…", 62);
+        addClass("tip-btn-skills", "clicked");
+        await wait(300);
+        show("tip-skills");
+        await wait(2000);
+        hide("tip-skills");
+        removeClass("tip-btn-skills", "clicked");
+        await wait(300);
+
+        // Add skills one by one
+        const skillsList = ["TypeScript", "React", "Node.js", "PostgreSQL", "AWS", "Docker"];
+        narrate("3", "Adding skills one at a time — they appear as tags…", 65);
+
+        for (const skill of skillsList) {
+            await typeText("input-skill", skill, 45);
+            await wait(150);
+            addClass("btn-add-skill", "clicked");
+            await wait(200);
+            removeClass("btn-add-skill", "clicked");
+            el("input-skill").textContent = "";
+            await addSkillTag(skill);
+            await wait(100);
+        }
+
+        await wait(600);
+
+        // Click Continue
+        narrate("3", "Education and skills done — final step…", 72);
+        addClass("btn-next-3", "clicked");
+        await wait(400);
+        removeClass("btn-next-3", "clicked");
+        await wait(300);
+
+
+        // ══════════════════════════════════════════════════════════
+        //  STEP 4 — Projects + Review + Generate
+        // ══════════════════════════════════════════════════════════
+        setActiveStep(4);
+        switchPanel(4);
+        narrate("4", "Step 4: Projects and final review…", 75);
+        await wait(400);
+        show("card-4a");
+        await wait(400);
+
+        // Project entry
+        const projEntry = createProjEntry({
+            nameId: "proj-name-1",
+            descId: "proj-desc-1",
+            techId: "proj-tech-1",
+        });
+        el("proj-entries").appendChild(projEntry);
+        await wait(100);
+        show(projEntry);
+        await wait(400);
+
+        narrate("4", "Adding a side project with description…", 78);
+        await typeText("proj-name-1", "CloudDeploy CLI", 45);
+        await wait(200);
+        await typeText("proj-desc-1", "Zero-config deployment tool for Node.js apps. 1.2k GitHub stars.", 20);
+        await wait(200);
+        await typeText("proj-tech-1", "Go, Docker, AWS CDK", 40);
+        await wait(600);
+
+        // Review
+        show("card-4b");
+        narrate("4", "The review panel summarises everything entered…", 82);
+        await wait(400);
+
+        const reviewSections = [
+            { title: "Personal Information", content: "<strong>Sarah Chen</strong><br>Senior Full-Stack Engineer<br>sarah.chen@email.com · +44 7700 900123 · London, UK" },
+            { title: "Summary", content: "Engineer with 6 years building scalable distributed systems. Led migration from monolith to microservices, reducing deploy time by 80%." },
+            { title: "Experience", content: '<div style="padding-left:8px;border-left:2px solid #d2d5d8;margin-bottom:4px;"><strong>Stellar Technologies</strong> — Senior Full-Stack Engineer<br><small>Mar 2021 — Present</small><br>• Architected event-driven microservices<br>• Reduced CI/CD time by 82%<br>• Mentored 4 junior engineers</div>' },
+            { title: "Education", content: "<strong>Imperial College London</strong><br>MEng Computer Science — 2015–2019" },
+            { title: "Skills", content: "TypeScript, React, Node.js, PostgreSQL, AWS, Docker" },
+            { title: "Projects", content: '<strong>CloudDeploy CLI</strong><br>Zero-config deployment tool · Go, Docker, AWS CDK' },
+        ];
+
+        for (const section of reviewSections) {
+            const sectionEl = addReviewSection(section.title, section.content);
+            await wait(100);
+            show(sectionEl);
+            await wait(300);
+        }
+
+        await wait(800);
+
+        // ── Generate PDF ──
+        narrate("4", "Everything looks good — clicking Generate Resume PDF…", 88);
+        await wait(500);
+
+        addClass("btn-generate", "clicked");
+        await wait(300);
+        el("gen-text").style.display = "none";
+        show("gen-spinner");
+        narrate("4", "Sending data to the server… generating PDF with ReportLab…", 92);
+        await wait(2500);
+
+        // Show success
+        hide("gen-spinner");
+        el("gen-text").textContent = "✓ Downloaded!";
+        el("gen-text").style.display = "inline";
+        removeClass("btn-generate", "clicked");
+
+        const status = el("demo-status");
+        status.className = "demo-status success";
+        status.textContent = "✓ Your resume has been generated and downloaded.";
+        show(status);
+        await wait(1000);
+
+        // ── Show PDF Preview ──
+        narrate("✓", "Here's the generated PDF — clean, professional, A4 formatted", 96);
+        show("pdf-overlay");
+        await wait(500);
+
+        // Animate PDF sections appearing
+        show("pdf-name");
+        await wait(200);
+        show("pdf-jobtitle");
+        await wait(200);
+        show("pdf-contact");
+        await wait(300);
+        show("pdf-hr");
+        await wait(400);
+        show("pdf-sec-summary");
+        await wait(300);
+        show("pdf-sec-exp");
+        await wait(300);
+        show("pdf-sec-edu");
+        await wait(300);
+        show("pdf-sec-skills");
+        await wait(300);
+        show("pdf-sec-projects");
+        await wait(300);
+        show("pdf-footer");
+
+        narrate("✓", "Demo complete! The resume is ready to download.", 100);
+        await wait(6000);
+
+        // ── Loop: restart demo ──
+        narrate("↻", "Restarting demo…", 0);
+        await wait(2000);
+        resetDemo();
+        await wait(500);
+        runDemo();
+    }
+
+
+    // ─── Reset everything for restart ─────────────────────────────
+
+    function resetDemo() {
+        // Hide everything
+        hide("demo-wrapper");
+        hide("narration");
+
+        // Reset hero
+        removeClass("hero", "hidden");
+
+        // Reset step indicator
+        document.querySelectorAll(".demo-step-item").forEach(item => {
+            item.classList.remove("active", "completed");
+            item.querySelector(".demo-step-circle").textContent = item.dataset.step;
+        });
+        document.querySelector('.demo-step-item[data-step="1"]').classList.add("active");
+
+        // Reset panels
+        document.querySelectorAll(".demo-step-content").forEach(p => p.classList.remove("active"));
+        el("step-1").classList.add("active");
+
+        // Reset cards
+        ["card-1", "card-2", "card-3a", "card-3b", "card-4a", "card-4b"].forEach(id => {
+            hide(id);
+        });
+
+        // Reset fields
+        ["f-name", "f-title", "f-contact", "f-location", "f-summary", "f-skill"].forEach(id => {
+            hide(id);
+        });
+
+        // Clear typed inputs
+        [
+            "input-name", "input-title", "input-email", "input-phone",
+            "input-location", "input-summary", "input-skill"
+        ].forEach(id => {
+            const e = el(id);
+            if (e) { e.textContent = ""; e.classList.remove("focused"); }
+        });
+
+        // Reset tips
+        ["tip-name", "tip-summary", "tip-skills"].forEach(id => hide(id));
+        ["tip-btn-name", "tip-btn-summary", "tip-btn-skills"].forEach(id => removeClass(id, "clicked"));
+
+        // Clear repeater entries
+        ["exp-entries", "edu-entries", "proj-entries"].forEach(id => {
+            const container = el(id);
+            if (container) container.innerHTML = "";
+        });
+
+        // Clear skills
+        el("skills-area").innerHTML = "";
+
+        // Clear review
+        el("review-area").innerHTML = "";
+
+        // Reset generate button
+        el("gen-text").textContent = "Generate Resume PDF";
+        el("gen-text").style.display = "inline";
+        hide("gen-spinner");
+        removeClass("btn-generate", "clicked");
+
+        // Reset status
+        const status = el("demo-status");
+        status.className = "demo-status";
+        status.textContent = "";
+
+        // Reset buttons
+        ["btn-next-1", "btn-next-2", "btn-next-3", "btn-add-exp", "btn-add-skill"].forEach(id => {
+            removeClass(id, "clicked");
+        });
+
+        // Hide PDF overlay
+        hide("pdf-overlay");
+        ["pdf-name", "pdf-jobtitle", "pdf-contact", "pdf-hr",
+         "pdf-sec-summary", "pdf-sec-exp", "pdf-sec-edu",
+         "pdf-sec-skills", "pdf-sec-projects", "pdf-footer"
+        ].forEach(id => hide(id));
+    }
+
+
+    // ─── Start ────────────────────────────────────────────────────
+    runDemo();
+
+})();
+</script>
+
+</body>
+</html>
