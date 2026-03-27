@@ -28,6 +28,7 @@ LakshyaCV/
 ├── demo.html               # Animated product demonstration
 ├── static/                 # Served frontend assets
 └── .gitignore              # Repository exclusions
+└── requirements.txt        # Repository python libraries required
 ```
 
 ## Technology Stack
