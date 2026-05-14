@@ -226,7 +226,7 @@ def _classic_styles():
         "summary":     ParagraphStyle("c_summary", fontName="Times-Roman", fontSize=10,
                            textColor=MID, leading=14, spaceAfter=2),
         "skill":       ParagraphStyle("c_skill", fontName="Helvetica", fontSize=9,
-                           textColor=BLK, leading=13),
+                           textColor=BLK, leading=13, alignment=TA_CENTER),
         "edu_inst":    ParagraphStyle("c_edu_inst", fontName="Times-Bold", fontSize=10.5,
                            textColor=BLK, leading=14),
         "edu_deg":     ParagraphStyle("c_edu_deg", fontName="Times-Roman", fontSize=10,
@@ -296,7 +296,7 @@ def build_classic_pdf(data: dict) -> bytes:
 
     if data["skills"]:
         story += section("Skills")
-        story += _skills_row_plain(data["skills"], s["skill"])
+        story += _skills_row_pills(data["skills"], usable_w, colors.HexColor("#eeeeee"), "#222222", per_row=6)
 
     doc.build(story, onFirstPage=footer_fn("#000000"), onLaterPages=footer_fn("#000000"))
     buf.seek(0)

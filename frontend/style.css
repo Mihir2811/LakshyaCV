@@ -1060,3 +1060,51 @@ a:focus {
   align-self: flex-start;
 }
 .save-dialog__close:hover { color: var(--text); }
+
+/* ── Skills tag input ──────────────────────────────────────────────────────── */
+.lc-skill-input-row {
+  display: flex;
+  gap: var(--s2);
+}
+.lc-skill-input-row .govuk-input {
+  flex: 1;
+}
+.lc-btn-add-skill {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: #1d7a6b;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 0 #155a4e;
+  padding: 0 var(--s4);
+  cursor: pointer;
+  white-space: nowrap;
+  height: 40px;
+  flex-shrink: 0;
+}
+.lc-btn-add-skill:hover { background: #155a4e; }
+.lc-btn-add-skill:focus { outline: 3px solid var(--focus); background: var(--focus); color: var(--focus-text); box-shadow: none; }
+@media (min-width: 641px) { .lc-btn-add-skill { height: 45px; } }
+
+.lc-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+  background: #1d7a6b;
+  padding: 3px var(--s2) 3px var(--s3);
+}
+.lc-skill-tag__remove {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.lc-skill-tag__remove:hover { color: #fff; }

@@ -229,8 +229,8 @@ function blockTemplate(type, id) {
       </div>
       <div class="govuk-form-group">
         <label class="govuk-label" for="edu-gpa-${id}">GPA (optional)</label>
-        <div class="govuk-hint">Include only if 3.5 or above</div>
-        <input class="govuk-input" type="text" id="edu-gpa-${id}" placeholder="3.8 / 4.0" />
+        <div class="govuk-hint">Include only if CGPA 7.0 & GPA 3.0 or above</div>
+        <input class="govuk-input" type="text" id="edu-gpa-${id}" placeholder="9.0 / 10.0 or 3.5 / 4.0" />
       </div>
     </div>`;
 
@@ -261,12 +261,32 @@ function blockTemplate(type, id) {
 }
 
 /* ══ Skills tags ══════════════════════════════════════════════════════════════ */
+let skillTags = [];
+
+function addSkillTag() {
+  const input = document.getElementById("skill-input");
+  const tag = input.value.trim();
+  if (!tag || skillTags.includes(tag)) { input.value = ""; return; }
+  skillTags.push(tag);
+  input.value = "";
+  renderSkillTags();
+  input.focus();
+}
+
+function removeSkillTag(idx) {
+  skillTags.splice(idx, 1);
+  renderSkillTags();
+}
+
 function renderSkillTags() {
-  const tags    = val("skills").split(",").map(s => s.trim()).filter(Boolean);
   const preview = document.getElementById("skills-preview");
-  preview.innerHTML = tags.map(t => `<strong class="lc-skill-tag">${escHtml(t)}</strong>`).join("");
+  preview.innerHTML = skillTags.map((t, i) =>
+    `<span class="lc-skill-tag">${escHtml(t)}<button class="lc-skill-tag__remove" type="button" onclick="removeSkillTag(${i})" aria-label="Remove ${escHtml(t)}">&times;</button></span>`
+  ).join("");
   updateCompleteness();
 }
+
+function getSkillsString() { return skillTags.join(", "); }
 
 /* ══ Char counter ════════════════════════════════════════════════════════════ */
 function updateCharCount(el, counterId, max) {
@@ -280,7 +300,7 @@ function updateCharCount(el, counterId, max) {
 function updateCompleteness() {
   const checks = [
     !!val("p-name"), !!val("p-email"), !!val("p-title"), !!val("p-phone"),
-    !!val("summary"), !!val("skills"),
+    !!val("summary"), skillTags.length > 0,
     !!document.querySelector("[id^='exp-company-']")?.value?.trim(),
     !!document.querySelector("[id^='exp-bullets-']")?.value?.trim(),
     !!document.querySelector("[id^='edu-institution-']")?.value?.trim(),
@@ -296,7 +316,7 @@ function buildReviewPanel() {
   const expCount  = document.querySelectorAll("[id^='exp-company-']").length;
   const eduCount  = document.querySelectorAll("[id^='edu-institution-']").length;
   const projCount = document.querySelectorAll("[id^='proj-name-']").length;
-  const skills    = val("skills").split(",").filter(s => s.trim()).length;
+  const skills    = skillTags.length;
   const tplNames  = { classic: "Classic (Black & White)", executive: "Executive (Navy)", modern: "Modern (Teal)" };
 
   const rows = [
@@ -337,7 +357,7 @@ function collectFormData() {
   });
   return {
     personal: { name: val("p-name"), title: val("p-title"), email: val("p-email"), phone: val("p-phone"), location: val("p-location"), linkedin: val("p-linkedin"), github: val("p-github"), website: val("p-website") },
-    summary: val("summary"), skills: val("skills"), template: selectedTemplate,
+    summary: val("summary"), skills: getSkillsString(), template: selectedTemplate,
     experience, education, projects,
   };
 }
@@ -445,8 +465,10 @@ function restoreFormData() {
   // Restore summary & skills
   const summaryEl = document.getElementById("summary");
   if (summaryEl && data.summary) { summaryEl.value = data.summary; updateCharCount(summaryEl, "summary-count", 600); }
-  const skillsEl = document.getElementById("skills");
-  if (skillsEl && data.skills) { skillsEl.value = data.skills; renderSkillTags(); }
+  if (data.skills) {
+    skillTags = data.skills.split(",").map(s => s.trim()).filter(Boolean);
+    renderSkillTags();
+  }
 
   // Restore dynamic blocks
   const restoreBlocks = (type, items, fillFn) => {
