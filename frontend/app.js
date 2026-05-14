@@ -33,9 +33,7 @@ const JOB_ROLES = [
 /* ══ Init ════════════════════════════════════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
   populateRoleDropdowns();
-  addBlock("experience");
-  addBlock("education");
-  addBlock("projects");
+  restoreFormData();
   updateCompleteness();
   document.querySelectorAll(".govuk-input, .govuk-textarea").forEach(el => {
     el.addEventListener("input", updateCompleteness);
@@ -368,6 +366,120 @@ async function generateResume() {
     btn.innerHTML = "Download PDF";
   }
 }
+
+/* ══ Local storage — save / restore / clear ═════════════════════════════════ */
+const LS_KEY = "lakshyacv_draft";
+
+function saveFormData() {
+  try {
+    const data = collectFormData();
+    data._blockCounters = { ...blockCounters };
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+    showSaveDialog();
+  } catch (e) {
+    showToast("Could not save: " + e.message, "error");
+  }
+}
+
+function showSaveDialog() {
+  const existing = document.getElementById("save-dialog");
+  if (existing) existing.remove();
+
+  const d = document.createElement("div");
+  d.id = "save-dialog";
+  d.setAttribute("role", "status");
+  d.setAttribute("aria-live", "polite");
+  d.innerHTML = `
+    <div class="save-dialog__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+    </div>
+    <div class="save-dialog__body">
+      <div class="save-dialog__title">Data saved on your device</div>
+      <div class="save-dialog__sub">Your progress has been saved successfully to your browser&#39;s local storage.</div>
+    </div>
+    <button class="save-dialog__close" aria-label="Dismiss">&times;</button>
+  `;
+  document.body.appendChild(d);
+  d.querySelector(".save-dialog__close").addEventListener("click", () => d.remove());
+
+  // Double rAF ensures the browser has painted the initial state before transitioning
+  requestAnimationFrame(() => requestAnimationFrame(() => d.classList.add("save-dialog--show")));
+
+  const autoRemove = setTimeout(() => {
+    d.classList.remove("save-dialog--show");
+    setTimeout(() => d.remove(), 350);
+  }, 5000);
+
+  d.querySelector(".save-dialog__close").addEventListener("click", () => clearTimeout(autoRemove), { once: true });
+}
+
+function clearFormData() {
+  if (!confirm("Delete all saved data and start fresh?")) return;
+  localStorage.removeItem(LS_KEY);
+  location.reload();
+}
+
+function restoreFormData() {
+  const raw = localStorage.getItem(LS_KEY);
+  if (!raw) {
+    // no saved data — just add default empty blocks
+    addBlock("experience");
+    addBlock("education");
+    addBlock("projects");
+    return;
+  }
+  let data;
+  try { data = JSON.parse(raw); } catch { addBlock("experience"); addBlock("education"); addBlock("projects"); return; }
+
+  // Restore template
+  if (data.template) selectTemplate(data.template);
+
+  // Restore personal fields
+  const p = data.personal || {};
+  const fieldMap = { "p-name": p.name, "p-title": p.title, "p-email": p.email, "p-phone": p.phone, "p-location": p.location, "p-linkedin": p.linkedin, "p-github": p.github, "p-website": p.website };
+  Object.entries(fieldMap).forEach(([id, v]) => { const el = document.getElementById(id); if (el && v) el.value = v; });
+
+  // Restore summary & skills
+  const summaryEl = document.getElementById("summary");
+  if (summaryEl && data.summary) { summaryEl.value = data.summary; updateCharCount(summaryEl, "summary-count", 600); }
+  const skillsEl = document.getElementById("skills");
+  if (skillsEl && data.skills) { skillsEl.value = data.skills; renderSkillTags(); }
+
+  // Restore dynamic blocks
+  const restoreBlocks = (type, items, fillFn) => {
+    const count = items?.length || 1;
+    for (let i = 0; i < count; i++) { addBlock(type); }
+    items?.forEach((item, idx) => fillFn(item, idx + 1));
+  };
+
+  restoreBlocks("experience", data.experience, (item, id) => {
+    setVal(`exp-company-${id}`, item.company);
+    setVal(`exp-role-${id}`, item.role);
+    setVal(`exp-period-${id}`, item.period);
+    setVal(`exp-bullets-${id}`, item.bullets);
+  });
+
+  restoreBlocks("education", data.education, (item, id) => {
+    setVal(`edu-institution-${id}`, item.institution);
+    setVal(`edu-degree-${id}`, item.degree);
+    setVal(`edu-year-${id}`, item.year);
+    setVal(`edu-gpa-${id}`, item.gpa);
+  });
+
+  restoreBlocks("projects", data.projects, (item, id) => {
+    setVal(`proj-name-${id}`, item.name);
+    setVal(`proj-url-${id}`, item.url);
+    setVal(`proj-tech-${id}`, item.tech);
+    setVal(`proj-desc-${id}`, item.description);
+  });
+
+  showToast("Draft restored from saved data.", "success");
+}
+
+function setVal(id, v) { const el = document.getElementById(id); if (el && v) el.value = v; }
 
 /* ══ Utilities ═══════════════════════════════════════════════════════════════ */
 function val(id)    { return (document.getElementById(id)?.value || "").trim(); }

@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/govuk-frontend@5.4.0/dist/govuk/govuk-frontend.min.css" />
 
   <!-- LakshyaCV overrides and custom components -->
-  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/style.css?v=2" />
 </head>
 
 <body class="govuk-template__body">
@@ -507,6 +507,17 @@
     </main>
   </div><!-- /govuk-width-container -->
 
+  <!-- Save / Clear bar -->
+  <div class="lc-save-bar">
+    <div class="govuk-width-container lc-save-bar__inner">
+      <span class="lc-save-bar__hint">Your data is never sent to our servers &mdash; save it locally so you can return later.</span>
+      <div class="lc-save-bar__actions">
+        <button class="govuk-button lc-button--accent" type="button" onclick="saveFormData()">Save Progress</button>
+        <button class="govuk-button govuk-button--warning" type="button" onclick="clearFormData()">Clear All</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ════════════════════════════════════════
        GOV.UK FOOTER — exact structure
   ════════════════════════════════════════ -->
@@ -606,6 +617,6 @@
 
   <div class="lc-toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="/static/app.js"></script>
+  <script src="/static/app.js?v=2"></script>
 </body>
 </html>
